@@ -12,9 +12,9 @@ const floorPlansRoutes = require('./src/routes/floorPlansRoutes');
 
 const app = express();
 
-// Middleware
+// Middleware - ONLY allow your local frontend
 app.use(cors({
-  origin: 'https://reall-estete.netlify.app',  // ← ONLY this one deployed frontend is allowed
+  origin: 'https://reall-estete.netlify.app/',           // ← ONLY this one local frontend link is allowed
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -32,12 +32,12 @@ app.use('/api/construction-updates', constructionUpdatesRoutes);
 app.use('/api/faqs', faqsRoutes);
 app.use('/api/floor-plans', floorPlansRoutes);
 
-// Root route - simple health check
+// Root route for testing
 app.get('/', (req, res) => {
   res.json({
     message: 'Vighnaharta Infinity Backend is LIVE',
     status: 'ok',
-    allowedOrigin: 'https://reall-estete.netlify.app',
+    allowedFrontend: 'https://reall-estete.netlify.app/',
     timestamp: new Date().toISOString()
   });
 });
