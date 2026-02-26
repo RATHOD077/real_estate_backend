@@ -2,40 +2,42 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const heroRoutes = require('./src/routes/heroRoutes');     // dedicated hero routes
-const adminRoutes = require('./src/routes/adminRoutes');   // keep your admin routes
-const aboutRoutes = require('./src/routes/aboutRoutes');      // ← added
-const amenitiesRoutes = require('./src/routes/amenitiesRoutes');  // ← added
-const constructionUpdatesRoutes = require('./src/routes/constructionUpdatesRoutes');  // ← added
-const faqsRoutes = require('./src/routes/faqsRoutes');              // ← added
-const floorPlansRoutes = require('./src/routes/floorPlansRoutes');  // ← added
-
+const heroRoutes = require('./src/routes/heroRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const aboutRoutes = require('./src/routes/aboutRoutes');
+const amenitiesRoutes = require('./src/routes/amenitiesRoutes');
+const constructionUpdatesRoutes = require('./src/routes/constructionUpdatesRoutes');
+const faqsRoutes = require('./src/routes/faqsRoutes');
+const floorPlansRoutes = require('./src/routes/floorPlansRoutes');
 
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
+  origin: 'https://reall-estete.netlify.app',  // ← ONLY this one deployed frontend is allowed
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/hero', heroRoutes);          // Hero section only
-app.use('/api/admin', adminRoutes);        // Admin login etc.
-app.use('/api/about-project', aboutRoutes);           // ← added
-app.use('/api/amenities', amenitiesRoutes);           // ← added
-app.use('/api/construction-updates', constructionUpdatesRoutes);      // ← added
-app.use('/api/faqs', faqsRoutes);                           // ← added
-app.use('/api/floor-plans', floorPlansRoutes);           // ← added
+app.use('/api/hero', heroRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/about-project', aboutRoutes);
+app.use('/api/amenities', amenitiesRoutes);
+app.use('/api/construction-updates', constructionUpdatesRoutes);
+app.use('/api/faqs', faqsRoutes);
+app.use('/api/floor-plans', floorPlansRoutes);
 
-
-// Root route for testing
+// Root route - simple health check
 app.get('/', (req, res) => {
   res.json({
     message: 'Vighnaharta Infinity Backend is LIVE',
     status: 'ok',
+    allowedOrigin: 'https://reall-estete.netlify.app',
     timestamp: new Date().toISOString()
   });
 });
