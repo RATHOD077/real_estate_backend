@@ -12,9 +12,9 @@ const floorPlansRoutes = require('./src/routes/floorPlansRoutes');
 
 const app = express();
 
-// Middleware - ONLY allow your local frontend
+// FIXED CORS – no trailing slash, exact match to Netlify origin
 app.use(cors({
-  origin: 'https://reall-estete.netlify.app/',           // ← ONLY this one local frontend link is allowed
+  origin: 'https://reall-estete.netlify.app',  // ← NO trailing slash!
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -23,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Routes (unchanged)
 app.use('/api/hero', heroRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/about-project', aboutRoutes);
@@ -32,22 +32,19 @@ app.use('/api/construction-updates', constructionUpdatesRoutes);
 app.use('/api/faqs', faqsRoutes);
 app.use('/api/floor-plans', floorPlansRoutes);
 
-// Root route for testing
+// Root health check
 app.get('/', (req, res) => {
   res.json({
     message: 'Vighnaharta Infinity Backend is LIVE',
     status: 'ok',
-    allowedFrontend: 'https://reall-estete.netlify.app/',
+    allowedOrigin: 'https://reall-estete.netlify.app',
     timestamp: new Date().toISOString()
   });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
-    message: 'Route not found',
-    requested: req.originalUrl 
-  });
+  res.status(404).json({ message: 'Route not found', requested: req.originalUrl });
 });
 
 // Global error handler
